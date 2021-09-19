@@ -3,6 +3,17 @@ import time
 from queue import Queue
 
 
+def execute_extractor(filename):
+    t0 = time.time()
+    if not filename:
+        return None
+    metadata = extract_hdf_main(hdf_file_path=filename)
+    print(metadata)
+    t1 = time.time()
+    metadata.update({"extract time": (t1 - t0)})
+    return metadata
+
+
 def extract_attribute_metadata(h5py_attributes):
     """Extracts metadata from h5py attribute manager classes.
 
@@ -64,11 +75,10 @@ def extract_dataset_metadata(h5py_dataset_obj):
     metadata_dictionary["type"] = "dataset"
     metadata_dictionary["attributes"] = extract_attribute_metadata(h5py_dataset_obj.attrs)
     metadata_dictionary["parent"] = h5py_dataset_obj.parent.name
-
     metadata_dictionary["shape"] = h5py_dataset_obj.shape
-    metadata_dictionary["dtype"] = h5py_dataset_obj.dtype
-    metadata_dictionary["size"] = h5py_dataset_obj.size
-    metadata_dictionary["nbytes"] = h5py_dataset_obj.nbytes
+    metadata_dictionary["dtype"] = h5py_dataset_obj.dtype.str
+    metadata_dictionary["size"] = h5py_dataset_obj.size.item()
+    metadata_dictionary["nbytes"] = h5py_dataset_obj.nbytes.item()
     metadata_dictionary["ndim"] = h5py_dataset_obj.ndim
     metadata_dictionary["compression"] = h5py_dataset_obj.compression
 
@@ -129,7 +139,6 @@ def extract_hdf_main(hdf_file_path):
         if isinstance(current, h5py.Group):
             group_metadata_dictionary = extract_group_metadata(current)
             metadata_dictionary["hdf"][current.name] = group_metadata_dictionary
-
             for value in current.values():
                 unprocessed.put(value)
         elif isinstance(current, h5py.Dataset):
