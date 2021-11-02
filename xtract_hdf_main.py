@@ -151,3 +151,5 @@ def extract_hdf_main(hdf_file_path):
     metadata_dictionary.update({"extract time": time.time() - t0})
 
     return metadata_dictionary
+
+# execute_extractor('A002_Aerogel_025C_att0_Lq0_001_0001-5000.hdf') 
