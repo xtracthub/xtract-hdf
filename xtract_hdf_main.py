@@ -1,7 +1,7 @@
 import h5py
 import time
 from queue import Queue
-
+from argparse import ArgumentParser
 
 def execute_extractor(filename):
     t0 = time.time()
@@ -152,4 +152,10 @@ def extract_hdf_main(hdf_file_path):
 
     return metadata_dictionary
 
-# execute_extractor('A002_Aerogel_025C_att0_Lq0_001_0001-5000.hdf') 
+
+if __name__ == "__main__":
+    arg_parser = ArgumentParser()
+    arg_parser.add_argument('--path', required=True)
+    args = arg_parser.parse_args()
+    mdata = execute_extractor(args.path)
+    print(mdata)
