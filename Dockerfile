@@ -4,8 +4,8 @@ COPY requirements.txt /
 
 RUN pip install -r requirements.txt
 
-ENV CONTAINER_VERSION=1.0
+ENV CONTAINER_VERSION=1.1
 
-RUN pip install xtract-sdk==0.0.7a2 funcx funcx_endpoint
+RUN pip install xtract-sdk==0.0.7a11 funcx funcx_endpoint
 COPY xtract_hdf_main.py /
 # COPY A002_Aerogel_025C_att0_Lq0_001_0001-5000.hdf /
